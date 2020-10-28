@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Text, View } from 'react-native'
-import Styles from '../styles/Styles'
+import { Styles } from '../styles/Styles'
 
 export default class RecipeScreen extends Component {
     render() {
@@ -9,6 +9,7 @@ export default class RecipeScreen extends Component {
         return (
             <View style={Styles.container}>
                 <Text>Title : {params.recipe.title}</Text>
+                <Text>{JSON.stringify(params.recipe)}</Text>
             </View>
         )
     }

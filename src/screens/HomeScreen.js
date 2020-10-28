@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
-import { Text, View, Button, StyleSheet, TouchableOpacity } from 'react-native'
-import { FlatList } from 'react-native-gesture-handler'
-import Styles from '../styles/Styles.js'
+import { Text, View, Button, StyleSheet, TouchableOpacity, Image, ImageBackground } from 'react-native'
+import { FlatList, ScrollView } from 'react-native-gesture-handler'
+import { Styles, FlatListBottomSeparator, FlatListRightSeparator } from '../styles/Styles.js'
+import { Dimensions } from 'react-native';
 
 const receep = [
     {name:'banana soup', calories: 110},
@@ -27,7 +28,7 @@ export default class HomeScreen extends Component {
             this.setState({recipes:response.recipes})
         })
     }
-    renderItem = ({ item }) => {    
+    renderRandomRecipes = ({ item }) => {    
         return (
             <TouchableOpacity 
                 onPress={() => {
@@ -38,44 +39,43 @@ export default class HomeScreen extends Component {
                         }
                     });
                 }}
-                style={styles.item}
+                style={{...Styles.recipe_card, ...Styles.recipe_card_small}}
             >
-                <Text style={styles.title}>{item.title}</Text>
+                <ImageBackground source={{uri:item.image}} style={Styles.recipe_card_image} imageStyle={Styles.recipe_card_image} />
+                <Text style={{...Styles.title, ...Styles.recipe_card_text}}>{item.title}</Text>
             </TouchableOpacity>
         );
     };
+
     render() {
         console.log('home', this.props);
         if(this.state.load === '1'){
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>Loading</View>
         }
         return (
-            <View style={Styles.container}>
-                <Text>Home Screen</Text>
+            <ScrollView style={Styles.container}>
+                <Text style={Styles.title}>Try out these recipes</Text>
                 
-                <View>
+                <View style={{marginBottom:25}}>
                     <FlatList
+                        ItemSeparatorComponent={FlatListRightSeparator}
+                        style={{marginTop:15}}
                         data={this.state.recipes}
-                        renderItem={this.renderItem}
+                        renderItem={this.renderRandomRecipes}
                         keyExtractor={(item) => item.id}
-                        // extraData={selectedId}
+                        horizontal={true}
                     />
                 </View>
 
-                {/* <Button
-                    title="Go to Details"
-                    onPress={() => {
-                        this.props.navigation.navigate('Home', {
-                            screen: 'Details',
-                            params: {
-                                itemId: 86,
-                                FUID: 'qwertyuiop123456789',
-                                receep: receep
-                            }
-                        });
-                    }}
-                /> */}
-            </View>
+                <Text style={Styles.title}>Categories</Text>
+                
+                <View style={{...Styles.categories_parent, marginTop:15}}>
+                    <View style={Styles.categories}><Text style={Styles.categories_text}>Pasta</Text></View>
+                    <View style={Styles.categories}><Text style={Styles.categories_text}>Dessert</Text></View>
+                    <View style={Styles.categories}><Text style={Styles.categories_text}>Rice</Text></View>
+                    <View style={Styles.categories}><Text style={Styles.categories_text}>Apa</Text></View>
+                </View>
+            </ScrollView>
         )
     }
 }
